@@ -1,4 +1,4 @@
-from mongo import MongoClient
+from pymongo import MongoClient
 
 
 class MongoDao:
