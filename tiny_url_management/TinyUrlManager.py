@@ -13,4 +13,4 @@ class TinyUrlManager:
                 return None
 
             self.redis_dao.set_url(short_url, full_url)
-            return full_url
+        return full_url
