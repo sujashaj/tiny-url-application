@@ -1,9 +1,14 @@
 from pymongo import MongoClient
+import os
+
+MONGO_HOST = os.getenv('MONGO_HOST')
+MONGO_USER = os.getenv('MONGO_USER')
+MONGO_PASSWORD = os.getenv('MONGO_PASSWORD')
 
 
 class MongoDao:
-    def __init__(self, host='localhost', port=27017):
-        self.mongo_client = MongoClient(f'mongodb://{host}:{port}')
+    def __init__(self):
+        self.mongo_client = MongoClient(f'mongodb+srv://{MONGO_USER}:{MONGO_PASSWORD}@{MONGO_HOST}/?retryWrites=true&w=majority&appName=Cluster0')
         self.db = self.mongo_client['tinyurl']
 
     def get_short_url(self, full_url):

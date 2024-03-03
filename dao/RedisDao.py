@@ -1,12 +1,18 @@
 import redis
+import os
+
+REDIS_HOST = os.getenv('REDIS_HOST')
+REDIS_PORT = os.getenv('REDIS_PORT')
+REDIS_PASSWORD = os.getenv('REDIS_PASSWORD')
 
 
 class RedisDao:
 
     SHORT_PREFIX = "short:"
     FULL_PREFIX = "full:"
-    def __init__(self, host='localhost', port=6379):
-        self.redis_client = redis.StrictRedis(host=host, port=port, decode_responses=True)
+    def __init__(self):
+        self.redis_client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT,
+                                              password=REDIS_PASSWORD, decode_responses=True)
 
     def get_short_url(self, full_url):
         return self.redis_client.get(RedisDao.FULL_PREFIX + full_url)
