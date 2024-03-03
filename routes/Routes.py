@@ -15,17 +15,22 @@ class Routes:
         return "Welcome to the Tiny Url Management Application!"
 
     def redirect_to_full_url(self, short_url):
-        full_url = self.tiny_url_manager.get_url(short_url)
+        full_url = self.tiny_url_manager.get_full_url(short_url)
         if full_url:
             return redirect(full_url, code=302)
         else:
             abort(404)
 
-    def generate_tiny_url(self, full_url):
-        key = self.tiny_url_manager.generate_key(full_url)
-        return {'tiny_url': self.host + key}, 200
+    def generate_tiny_url(self):
+        data = request.get_json()
+        if data:
+            full_url = data.get("full_url")
+        key = self.tiny_url_manager.get_short_url(full_url)
+        if not key:
+            key = self.tiny_url_manager.generate_key(full_url)
+        return {'short_url': self.host + key}, 200
 
     def register_routes(self):
         self.bp.add_url_rule("/", "home", self.home)
         self.bp.add_url_rule("/<short_url>", "redirect_to_full_url", self.redirect_to_full_url, methods=["GET"])
-        self.bp.add_url_rule("/generate_tiny_url", "generate_tiny_url", self.redirect_to_full_url, methods=["POST"])
+        self.bp.add_url_rule("/generateTinyUrl", "generate_tiny_url", self.generate_tiny_url, methods=["POST"])

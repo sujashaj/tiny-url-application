@@ -3,10 +3,14 @@ from pymongo import MongoClient
 
 class MongoDao:
     def __init__(self, host='localhost', port=27017):
-        self.mongo_client = MongoClient(f'mongodb://{host}:{port}/')
+        self.mongo_client = MongoClient(f'mongodb://{host}:{port}')
         self.db = self.mongo_client['tinyurl']
 
-    def get_url(self, short_url):
+    def get_short_url(self, full_url):
+        url_entry = self.db.urls.find_one({'full_url': full_url})
+        return url_entry['short_url'] if url_entry else None
+
+    def get_full_url(self, short_url):
         url_entry = self.db.urls.find_one({'short_url': short_url})
         return url_entry['full_url'] if url_entry else None
 
